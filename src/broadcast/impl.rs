@@ -4,7 +4,7 @@ impl<T: Clone + Debug> BroadcastTrait for T {}
 
 impl<T: BroadcastTrait> Default for Broadcast<T> {
     fn default() -> Self {
-        let sender: BroadcastSender<T> = BroadcastSender::new(DEFAULT_CAPACITY);
+        let sender: BroadcastSender<T> = BroadcastSender::new(DEFAULT_BROADCAST_SENDER_CAPACITY);
         Broadcast {
             capacity: 0,
             sender,
