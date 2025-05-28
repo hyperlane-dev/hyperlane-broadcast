@@ -36,7 +36,8 @@ broadcast.send(20).unwrap();
 assert_eq!(rec1.recv().await, Ok(20));
 assert_eq!(rec2.recv().await, Ok(20));
 
-let broadcast_map: BroadcastMap<usize> = BroadcastMap::new("a", 10);
+let broadcast_map: BroadcastMap<usize> = BroadcastMap::new();
+broadcast_map.insert("a", 10);
 let mut rec1: BroadcastMapReceiver<usize> = broadcast_map.subscribe("a").unwrap();
 let mut rec2: BroadcastMapReceiver<usize> = broadcast_map.subscribe("a").unwrap();
 broadcast_map.send("a", 20).unwrap();
