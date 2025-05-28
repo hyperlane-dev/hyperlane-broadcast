@@ -15,14 +15,13 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
         Self::default()
     }
 
-    pub fn insert<K>(&self, key: K, capacity: usize) -> &Self
+    pub fn insert<K>(&self, key: K, capacity: usize) -> OptionBroadcast<T>
     where
         K: ToString,
     {
         let key_string: String = key.to_string();
         let broadcast: Broadcast<T> = Broadcast::new(capacity);
-        self.get_broadcast().insert(key_string, broadcast);
-        self
+        self.get_broadcast().insert(key_string, broadcast)
     }
 
     pub fn receiver_count(&self, key: &str) -> OptionReceiverCount {
