@@ -1,6 +1,6 @@
 [package]
 name = "hyperlane-broadcast"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2024"
 authors = ["root@ltpp.vip"] 
 license = "MIT"
@@ -18,7 +18,7 @@ exclude = [
 [dependencies]
 dashmap = "6.1.0"
 lombok-macros = "1.11.4"
-tokio = { version = "1.45.0", features = ["full"] }
+tokio = { version = "1.45.1", features = ["full"] }
 
 [profile.dev]
 incremental = false
