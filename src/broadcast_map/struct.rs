@@ -1,8 +1,6 @@
 use crate::*;
 
-#[derive(Debug, Clone, Setter, Getter)]
+#[derive(Debug, Clone)]
 pub struct BroadcastMap<T: BroadcastTrait> {
-    #[get(pub(super))]
-    #[set(pub(super))]
     pub(super) broadcast: DashMap<String, Broadcast<T>>,
 }

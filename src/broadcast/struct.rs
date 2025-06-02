@@ -1,11 +1,7 @@
 use crate::*;
 
-#[derive(Debug, Clone, Setter, Getter)]
+#[derive(Debug, Clone)]
 pub struct Broadcast<T: BroadcastTrait> {
-    #[get(pub(super))]
-    #[set(pub(super))]
     pub(super) capacity: usize,
-    #[get(pub(super))]
-    #[set(pub(super))]
     pub(super) sender: BroadcastSender<T>,
 }

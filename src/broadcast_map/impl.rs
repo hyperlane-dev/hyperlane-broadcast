@@ -21,23 +21,21 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     {
         let key_string: String = key.to_string();
         let broadcast: Broadcast<T> = Broadcast::new(capacity);
-        self.get_broadcast().insert(key_string, broadcast)
+        self.broadcast.insert(key_string, broadcast)
     }
 
     pub fn receiver_count(&self, key: &str) -> OptionReceiverCount {
-        self.get_broadcast()
+        self.broadcast
             .get(key)
             .map(|receiver| receiver.receiver_count())
     }
 
     pub fn subscribe(&self, key: &str) -> OptionBroadcastMapReceiver<T> {
-        self.get_broadcast()
-            .get(key)
-            .map(|receiver| receiver.subscribe())
+        self.broadcast.get(key).map(|receiver| receiver.subscribe())
     }
 
     pub fn subscribe_unwrap_or_insert(&self, key: &str) -> BroadcastMapReceiver<T> {
-        match self.get_broadcast().get(key) {
+        match self.broadcast.get(key) {
             Some(sender) => sender.subscribe(),
             None => {
                 self.insert(key, DEFAULT_BROADCAST_SENDER_CAPACITY);
@@ -47,7 +45,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     }
 
     pub fn send(&self, key: &str, data: T) -> BroadcastMapSendResult<T> {
-        match self.get_broadcast().get(key) {
+        match self.broadcast.get(key) {
             Some(sender) => sender.send(data).map(|result| Some(result)),
             None => Ok(None),
         }
