@@ -8,3 +8,4 @@ pub type OptionBroadcastMapReceiver<T> = Option<BroadcastMapReceiver<T>>;
 pub type BroadcastMapSender<T> = Sender<T>;
 pub type OptionBroadcastMapSender<T> = Option<BroadcastMapSender<T>>;
 pub type OptionReceiverCount = Option<ReceiverCount>;
+pub type DashMapStringBroadcast<T> = DashMap<String, Broadcast<T>>;

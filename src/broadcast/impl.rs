@@ -13,7 +13,7 @@ impl<T: BroadcastTrait> Default for Broadcast<T> {
 }
 
 impl<T: BroadcastTrait> Broadcast<T> {
-    pub fn new(capacity: usize) -> Self {
+    pub fn new(capacity: Capacity) -> Self {
         let sender: BroadcastSender<T> = BroadcastSender::new(capacity);
         let mut broadcast: Broadcast<T> = Broadcast::default();
         broadcast.sender = sender;
@@ -21,7 +21,7 @@ impl<T: BroadcastTrait> Broadcast<T> {
         broadcast
     }
 
-    pub fn receiver_count(&self) -> usize {
+    pub fn receiver_count(&self) -> ReceiverCount {
         self.sender.receiver_count()
     }
 
