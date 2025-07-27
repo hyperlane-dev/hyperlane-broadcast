@@ -1,4 +1,6 @@
-//! `hyperlane-broadcast` hyperlane-broadcast is a lightweight
+//! Hyperlane Broadcast
+//!
+//! hyperlane-broadcast is a lightweight
 //! and ergonomic wrapper over Tokio’s broadcast channel designed
 //! for easy-to-use publish-subscribe messaging in async Rust applications.
 //! It simplifies the native Tokio broadcast API by providing a straightforward
