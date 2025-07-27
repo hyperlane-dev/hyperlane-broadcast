@@ -1,4 +1,4 @@
-//! Hyperlane Broadcast
+//! hyperlane-broadcast
 //!
 //! hyperlane-broadcast is a lightweight
 //! and ergonomic wrapper over Tokio’s broadcast channel designed
