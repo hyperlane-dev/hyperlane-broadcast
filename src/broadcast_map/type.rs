@@ -17,4 +17,4 @@ pub type OptionBroadcastMapSender<T> = Option<BroadcastMapSender<T>>;
 /// Represents an optional count of active receivers.
 pub type OptionReceiverCount = Option<ReceiverCount>;
 /// A concurrent, thread-safe map where keys are strings and values are broadcast channels.
-pub type DashMapStringBroadcast<T> = DashMap<String, Broadcast<T>>;
+pub type DashMapStringBroadcast<T> = DashMap<String, Broadcast<T>, BuildHasherDefault<XxHash3_64>>;

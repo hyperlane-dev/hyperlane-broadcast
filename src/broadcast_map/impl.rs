@@ -12,9 +12,9 @@ impl<T: BroadcastMapTrait> Default for BroadcastMap<T> {
     ///
     /// # Returns
     ///
-    /// An empty `BroadcastMap`.
+    /// - `BroadcastMap<T>` - An empty broadcast map.
     fn default() -> Self {
-        Self(DashMap::new())
+        Self(DashMap::with_hasher(BuildHasherDefault::default()))
     }
 }
 
@@ -26,7 +26,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Returns
     ///
-    /// An empty `BroadcastMap`.
+    /// - `BroadcastMap<T>` - An empty broadcast map.
     pub fn new() -> Self {
         Self::default()
     }
@@ -37,7 +37,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Returns
     ///
-    /// A reference to the `DashMapStringBroadcast` containing the broadcast channels.
+    /// - `&DashMapStringBroadcast<T>` - Reference to the internal map.
     fn get(&self) -> &DashMapStringBroadcast<T> {
         &self.0
     }
@@ -48,12 +48,12 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `key` - The key (convertible to `String`) to associate with the new broadcast channel.
-    /// - `capacity` - The maximum number of messages that can be buffered in the new broadcast channel.
+    /// - `K` - Key convertible to `String`.
+    /// - `Capacity` - Maximum number of buffered messages.
     ///
     /// # Returns
     ///
-    /// An `Option` containing the old `Broadcast` channel if one was replaced, otherwise `None`.
+    /// - `Option<Broadcast<T>>` - Previous broadcast channel if replaced.
     pub fn insert<K>(&self, key: K, capacity: Capacity) -> OptionBroadcast<T>
     where
         K: ToString,
@@ -67,11 +67,11 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `key` - The key (convertible to `String`) of the broadcast channel.
+    /// - `K` - Key convertible to `String`.
     ///
     /// # Returns
     ///
-    /// An `Option` containing the `ReceiverCount` if the broadcast channel exists, otherwise `None`.
+    /// - `Option<ReceiverCount>` - Number of receivers if channel exists.
     pub fn receiver_count<K>(&self, key: K) -> OptionReceiverCount
     where
         K: ToString,
@@ -85,11 +85,11 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `key` - The key (convertible to `String`) of the broadcast channel.
+    /// - `K` - Key convertible to `String`.
     ///
     /// # Returns
     ///
-    /// An `Option` containing a `BroadcastMapReceiver` if the broadcast channel exists, otherwise `None`.
+    /// - `Option<BroadcastReceiver<T>>` - New receiver if channel exists.
     pub fn subscribe<K>(&self, key: K) -> OptionBroadcastMapReceiver<T>
     where
         K: ToString,
@@ -104,12 +104,12 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `key` - The key (convertible to `String`) of the broadcast channel.
-    /// - `capacity` - The capacity to use if a new broadcast channel needs to be created.
+    /// - `K` - Key convertible to `String`.
+    /// - `Capacity` - Capacity for new channel if needed.
     ///
     /// # Returns
     ///
-    /// A `BroadcastMapReceiver` for the specified broadcast channel.
+    /// - `BroadcastReceiver<T>` - New receiver for the channel.
     pub fn subscribe_or_insert<K>(&self, key: K, capacity: Capacity) -> BroadcastMapReceiver<T>
     where
         K: ToString,
@@ -128,13 +128,12 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `key` - The key (convertible to `String`) of the broadcast channel.
-    /// - `data` - The message to be broadcasted.
+    /// - `K` - Key convertible to `String`.
+    /// - `T` - Message to broadcast.
     ///
     /// # Returns
     ///
-    /// A `BroadcastMapSendResult` indicating the number of receivers the message was sent to (if the channel exists),
-    /// or an error if the send operation failed. If the channel does not exist, `Ok(None)` is returned.
+    /// - `Result<Option<ReceiverCount>, SendError<T>>` - Send result with receiver count or error.
     pub fn send<K: ToString>(&self, key: K, data: T) -> BroadcastMapSendResult<T>
     where
         K: ToString,

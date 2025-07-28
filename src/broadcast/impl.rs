@@ -12,8 +12,7 @@ impl<T: BroadcastTrait> Default for Broadcast<T> {
     ///
     /// # Returns
     ///
-    /// A `Broadcast` instance with a sender initialized to `DEFAULT_BROADCAST_SENDER_CAPACITY`
-    /// and a capacity of 0.
+    /// - `Broadcast<T>` - A broadcast instance with default sender capacity.
     fn default() -> Self {
         let sender: BroadcastSender<T> = BroadcastSender::new(DEFAULT_BROADCAST_SENDER_CAPACITY);
         Broadcast {
@@ -29,11 +28,11 @@ impl<T: BroadcastTrait> Broadcast<T> {
     ///
     /// # Arguments
     ///
-    /// - `capacity` - The maximum number of messages that can be buffered in the broadcast channel.
+    /// - `Capacity` - The maximum number of messages that can be buffered.
     ///
     /// # Returns
     ///
-    /// A new `Broadcast` instance configured with the given capacity.
+    /// - `Broadcast<T>` - A new broadcast instance.
     pub fn new(capacity: Capacity) -> Self {
         let sender: BroadcastSender<T> = BroadcastSender::new(capacity);
         let mut broadcast: Broadcast<T> = Broadcast::default();
@@ -46,7 +45,7 @@ impl<T: BroadcastTrait> Broadcast<T> {
     ///
     /// # Returns
     ///
-    /// The total count of active receivers.
+    /// - `ReceiverCount` - The total count of active receivers.
     pub fn receiver_count(&self) -> ReceiverCount {
         self.sender.receiver_count()
     }
@@ -55,7 +54,7 @@ impl<T: BroadcastTrait> Broadcast<T> {
     ///
     /// # Returns
     ///
-    /// A `BroadcastReceiver` that can be used to receive messages sent through this broadcast channel.
+    /// - `BroadcastReceiver<T>` - A new receiver instance.
     pub fn subscribe(&self) -> BroadcastReceiver<T> {
         self.sender.subscribe()
     }
@@ -64,12 +63,11 @@ impl<T: BroadcastTrait> Broadcast<T> {
     ///
     /// # Arguments
     ///
-    /// - `data` - The message to be broadcasted.
+    /// - `T` - The message to be broadcasted.
     ///
     /// # Returns
     ///
-    /// A `BroadcastSendResult` indicating the number of receivers the message was sent to,
-    /// or a `BroadcastSendError` if the send operation failed.
+    /// - `BroadcastSendResult<T>` - Result indicating send status.
     pub fn send(&self, data: T) -> BroadcastSendResult<T> {
         self.sender.send(data)
     }
