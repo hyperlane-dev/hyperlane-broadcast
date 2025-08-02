@@ -1,12 +1,13 @@
 [package]
 name = "hyperlane-broadcast"
-version = "0.7.3"
+version = "0.7.4"
+readme = "README.md"
 edition = "2024"
 authors = ["root@ltpp.vip"]
 license = "MIT"
 description = """hyperlane-broadcast is a lightweight and ergonomic wrapper over Tokio’s broadcast channel designed for easy-to-use publish-subscribe messaging in async Rust applications. It simplifies the native Tokio broadcast API by providing a straightforward interface for broadcasting messages to multiple subscribers with minimal boilerplate."""
 keywords = ["time", "hyperlane", "broadcast", "tokio", "hyperlane"]
-repository = "https://github.com/hyperlane-utils/hyperlane-broadcast.git"
+repository = "https://github.com/crates-dev/hyperlane-broadcast.git"
 categories = ["network-programming", "web-programming"]
 exclude = [
     "target",
@@ -17,7 +18,7 @@ exclude = [
 
 [dependencies]
 dashmap = "6.1.0"
-tokio = { version = "1.47.0", features = ["full"] }
+tokio = { version = "1.47.1", features = ["full"] }
 twox-hash = "2.1.1"
 
 [profile.dev]
