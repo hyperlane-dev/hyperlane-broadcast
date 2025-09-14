@@ -48,36 +48,35 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `K` - Key convertible to `String`.
-    /// - `Capacity` - Maximum number of buffered messages.
+    /// - `AsRef<str>` - Key convertible to `str`.
+    /// - `capacity` - Maximum number of buffered messages.
     ///
     /// # Returns
     ///
     /// - `Option<Broadcast<T>>` - Previous broadcast channel if replaced.
     pub fn insert<K>(&self, key: K, capacity: Capacity) -> OptionBroadcast<T>
     where
-        K: ToString,
+        K: AsRef<str>,
     {
-        let key_string: String = key.to_string();
         let broadcast: Broadcast<T> = Broadcast::new(capacity);
-        self.get().insert(key_string, broadcast)
+        self.get().insert(key.as_ref().to_owned(), broadcast)
     }
 
     /// Retrieves the number of active receivers for the broadcast channel associated with the given key.
     ///
     /// # Arguments
     ///
-    /// - `K` - Key convertible to `String`.
+    /// - `AsRef<str>` - Key convertible to `str`.
     ///
     /// # Returns
     ///
     /// - `Option<ReceiverCount>` - Number of receivers if channel exists.
     pub fn receiver_count<K>(&self, key: K) -> OptionReceiverCount
     where
-        K: ToString,
+        K: AsRef<str>,
     {
         self.get()
-            .get(&key.to_string())
+            .get(key.as_ref())
             .map(|receiver| receiver.receiver_count())
     }
 
@@ -85,17 +84,17 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `K` - Key convertible to `String`.
+    /// - `AsRef<str>` - Key convertible to `str`.
     ///
     /// # Returns
     ///
     /// - `Option<BroadcastReceiver<T>>` - New receiver if channel exists.
     pub fn subscribe<K>(&self, key: K) -> OptionBroadcastMapReceiver<T>
     where
-        K: ToString,
+        K: AsRef<str>,
     {
         self.get()
-            .get(&key.to_string())
+            .get(key.as_ref())
             .map(|receiver| receiver.subscribe())
     }
 
@@ -104,22 +103,22 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `K` - Key convertible to `String`.
-    /// - `Capacity` - Capacity for new channel if needed.
+    /// - `AsRef<str>` - Key convertible to `str`.
+    /// - `capacity` - Capacity for new channel if needed.
     ///
     /// # Returns
     ///
     /// - `BroadcastReceiver<T>` - New receiver for the channel.
     pub fn subscribe_or_insert<K>(&self, key: K, capacity: Capacity) -> BroadcastMapReceiver<T>
     where
-        K: ToString,
+        K: AsRef<str>,
     {
-        let key_string: String = key.to_string();
-        match self.get().get(&key_string) {
+        let key_ref: &str = key.as_ref();
+        match self.get().get(key_ref) {
             Some(sender) => sender.subscribe(),
             None => {
-                self.insert(key, capacity);
-                self.subscribe_or_insert(key_string, capacity)
+                self.insert(key_ref, capacity);
+                self.subscribe_or_insert(key_ref, capacity)
             }
         }
     }
@@ -128,17 +127,17 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// # Arguments
     ///
-    /// - `K` - Key convertible to `String`.
-    /// - `T` - Message to broadcast.
+    /// - `AsRef<str>` - Key convertible to `str`.
+    /// - `data` - Message to broadcast.
     ///
     /// # Returns
     ///
     /// - `Result<Option<ReceiverCount>, SendError<T>>` - Send result with receiver count or error.
-    pub fn send<K: ToString>(&self, key: K, data: T) -> BroadcastMapSendResult<T>
+    pub fn send<K: AsRef<str>>(&self, key: K, data: T) -> BroadcastMapSendResult<T>
     where
-        K: ToString,
+        K: AsRef<str>,
     {
-        match self.get().get(&key.to_string()) {
+        match self.get().get(key.as_ref()) {
             Some(sender) => sender.send(data).map(|result| Some(result)),
             None => Ok(None),
         }
