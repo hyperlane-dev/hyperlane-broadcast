@@ -140,12 +140,9 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// - `Result<Option<ReceiverCount>, SendError<T>>` - Send result with receiver count or error.
     #[inline]
-    pub fn send<K: AsRef<str>>(&self, key: K, data: T) -> BroadcastMapSendResult<T>
-    where
-        K: AsRef<str>,
-    {
+    pub fn send<K: AsRef<str>>(&self, key: K, data: T) -> BroadcastMapSendResult<T> {
         match self.get().get(key.as_ref()) {
-            Some(sender) => sender.send(data).map(|result| Some(result)),
+            Some(sender) => sender.send(data).map(Some),
             None => Ok(None),
         }
     }

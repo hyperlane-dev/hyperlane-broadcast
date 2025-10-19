@@ -15,10 +15,7 @@ impl<T: BroadcastTrait> Default for Broadcast<T> {
     /// - `Broadcast<T>` - A broadcast instance with default sender capacity.
     fn default() -> Self {
         let sender: BroadcastSender<T> = BroadcastSender::new(DEFAULT_BROADCAST_SENDER_CAPACITY);
-        Broadcast {
-            capacity: 0,
-            sender,
-        }
+        Self(sender)
     }
 }
 
@@ -36,10 +33,7 @@ impl<T: BroadcastTrait> Broadcast<T> {
     #[inline]
     pub fn new(capacity: Capacity) -> Self {
         let sender: BroadcastSender<T> = BroadcastSender::new(capacity);
-        let mut broadcast: Broadcast<T> = Broadcast::default();
-        broadcast.sender = sender;
-        broadcast.capacity = capacity;
-        broadcast
+        Self(sender)
     }
 
     /// Retrieves the current number of active receivers subscribed to this broadcast channel.
@@ -49,7 +43,7 @@ impl<T: BroadcastTrait> Broadcast<T> {
     /// - `ReceiverCount` - The total count of active receivers.
     #[inline]
     pub fn receiver_count(&self) -> ReceiverCount {
-        self.sender.receiver_count()
+        self.0.receiver_count()
     }
 
     /// Subscribes a new receiver to the broadcast channel.
@@ -59,7 +53,7 @@ impl<T: BroadcastTrait> Broadcast<T> {
     /// - `BroadcastReceiver<T>` - A new receiver instance.
     #[inline]
     pub fn subscribe(&self) -> BroadcastReceiver<T> {
-        self.sender.subscribe()
+        self.0.subscribe()
     }
 
     /// Sends a message to all active receivers subscribed to this broadcast channel.
@@ -73,6 +67,6 @@ impl<T: BroadcastTrait> Broadcast<T> {
     /// - `BroadcastSendResult<T>` - Result indicating send status.
     #[inline]
     pub fn send(&self, data: T) -> BroadcastSendResult<T> {
-        self.sender.send(data)
+        self.0.send(data)
     }
 }

@@ -6,9 +6,4 @@ use crate::*;
 /// including the capacity of the broadcast channel and the sender responsible
 /// for dispatching messages.
 #[derive(Debug, Clone)]
-pub struct Broadcast<T: BroadcastTrait> {
-    /// The maximum number of messages that can be buffered in the broadcast channel.
-    pub(super) capacity: Capacity,
-    /// The sender component responsible for distributing messages to all connected receivers.
-    pub(super) sender: BroadcastSender<T>,
-}
+pub struct Broadcast<T: BroadcastTrait>(pub(super) BroadcastSender<T>);
