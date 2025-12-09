@@ -13,6 +13,7 @@ impl<T: BroadcastMapTrait> Default for BroadcastMap<T> {
     /// # Returns
     ///
     /// - `BroadcastMap<T>` - An empty broadcast map.
+    #[inline(always)]
     fn default() -> Self {
         Self(DashMap::with_hasher(BuildHasherDefault::default()))
     }
@@ -27,7 +28,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     /// # Returns
     ///
     /// - `BroadcastMap<T>` - An empty broadcast map.
-    #[inline]
+    #[inline(always)]
     pub fn new() -> Self {
         Self::default()
     }
@@ -39,7 +40,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     /// # Returns
     ///
     /// - `&DashMapStringBroadcast<T>` - Reference to the internal map.
-    #[inline]
+    #[inline(always)]
     fn get(&self) -> &DashMapStringBroadcast<T> {
         &self.0
     }
@@ -56,7 +57,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     /// # Returns
     ///
     /// - `Option<Broadcast<T>>` - Previous broadcast channel if replaced.
-    #[inline]
+    #[inline(always)]
     pub fn insert<K>(&self, key: K, capacity: Capacity) -> OptionBroadcast<T>
     where
         K: AsRef<str>,
@@ -74,7 +75,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     /// # Returns
     ///
     /// - `Option<ReceiverCount>` - Number of receivers if channel exists.
-    #[inline]
+    #[inline(always)]
     pub fn receiver_count<K>(&self, key: K) -> OptionReceiverCount
     where
         K: AsRef<str>,
@@ -93,7 +94,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     /// # Returns
     ///
     /// - `Option<BroadcastReceiver<T>>` - New receiver if channel exists.
-    #[inline]
+    #[inline(always)]
     pub fn subscribe<K>(&self, key: K) -> OptionBroadcastMapReceiver<T>
     where
         K: AsRef<str>,
@@ -114,7 +115,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     /// # Returns
     ///
     /// - `BroadcastReceiver<T>` - New receiver for the channel.
-    #[inline]
+    #[inline(always)]
     pub fn subscribe_or_insert<K>(&self, key: K, capacity: Capacity) -> BroadcastMapReceiver<T>
     where
         K: AsRef<str>,
@@ -139,7 +140,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     /// # Returns
     ///
     /// - `Result<Option<ReceiverCount>, SendError<T>>` - Send result with receiver count or error.
-    #[inline]
+    #[inline(always)]
     pub fn send<K: AsRef<str>>(&self, key: K, data: T) -> BroadcastMapSendResult<T> {
         match self.get().get(key.as_ref()) {
             Some(sender) => sender.send(data).map(Some),
