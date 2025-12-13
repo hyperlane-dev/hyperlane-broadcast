@@ -1,6 +1,6 @@
 [package]
 name = "hyperlane-broadcast"
-version = "0.8.3"
+version = "0.8.4"
 readme = "README.md"
 edition = "2024"
 authors = ["root@ltpp.vip"]
@@ -9,12 +9,7 @@ description = """hyperlane-broadcast is a lightweight and ergonomic wrapper over
 keywords = ["time", "hyperlane", "broadcast", "tokio", "hyperlane"]
 repository = "https://github.com/hyperlane-dev/hyperlane-broadcast.git"
 categories = ["network-programming", "web-programming"]
-exclude = [
-    "target",
-    "Cargo.lock",
-    "sh",
-    ".github"
-]
+exclude = ["target", "Cargo.lock", "sh", ".github"]
 
 [dependencies]
 dashmap = "6.1.0"
