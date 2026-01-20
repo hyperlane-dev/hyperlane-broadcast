@@ -1,4 +1,9 @@
-pub mod r#impl;
-pub mod r#struct;
-pub mod r#trait;
-pub mod r#type;
+pub(crate) mod r#impl;
+pub(crate) mod r#struct;
+pub(crate) mod r#trait;
+pub(crate) mod r#type;
+
+#[cfg(test)]
+mod test;
+
+pub use {r#struct::*, r#trait::*, r#type::*};
