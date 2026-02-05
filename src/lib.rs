@@ -11,8 +11,15 @@ mod broadcast_map;
 
 pub use {broadcast::*, broadcast_map::*};
 
+#[cfg(test)]
+use std::time::Duration;
 use std::{fmt::Debug, hash::BuildHasherDefault};
 
+#[cfg(test)]
+use tokio::{
+    sync::broadcast::error::RecvError,
+    time::{error::Elapsed, timeout},
+};
 use {
     dashmap::{mapref::one::Ref, *},
     tokio::sync::broadcast::{
@@ -20,13 +27,4 @@ use {
         {Receiver, Sender},
     },
     twox_hash::XxHash3_64,
-};
-
-#[cfg(test)]
-use std::time::Duration;
-
-#[cfg(test)]
-use tokio::{
-    sync::broadcast::error::RecvError,
-    time::{error::Elapsed, timeout},
 };
