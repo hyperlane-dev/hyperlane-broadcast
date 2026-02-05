@@ -1,6 +1,6 @@
 [package]
 name = "hyperlane-broadcast"
-version = "1.0.2"
+version = "2.0.0"
 readme = "README.md"
 edition = "2024"
 authors = ["root@ltpp.vip"]

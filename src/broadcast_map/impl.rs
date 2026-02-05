@@ -130,26 +130,47 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
         }
     }
 
-    /// Sends a message to the broadcast channel associated with the given key.
+    /// Attempts to send a message to the broadcast channel associated with the given key.
     ///
     /// # Arguments
     ///
     /// - `AsRef<str>` - Key convertible to `str`.
-    /// - `data` - Message to broadcast.
+    /// - `T` - Message to broadcast.
     ///
     /// # Returns
     ///
     /// - `Result<Option<ReceiverCount>, SendError<T>>` - Send result with receiver count or error.
     #[inline(always)]
-    pub fn send<K: AsRef<str>>(
-        &self,
-        key: K,
-        data: T,
-    ) -> Result<Option<ReceiverCount>, SendError<T>> {
+    pub fn try_send<K>(&self, key: K, data: T) -> Result<Option<ReceiverCount>, SendError<T>>
+    where
+        K: AsRef<str>,
+    {
         match self.get().get(key.as_ref()) {
             Some(sender) => sender.send(data).map(Some),
             None => Ok(None),
         }
+    }
+
+    /// Sends a message to the broadcast channel associated with the given key.
+    ///
+    /// # Arguments
+    ///
+    /// - `AsRef<str>` - Key convertible to `str`.
+    /// - `T` - Message to broadcast.
+    ///
+    /// # Returns
+    ///
+    /// - `Option<ReceiverCount>` - The receiver count if the channel exists.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the send operation fails (e.g., if the channel is closed).
+    #[inline(always)]
+    pub fn send<K>(&self, key: K, data: T) -> Option<ReceiverCount>
+    where
+        K: AsRef<str>,
+    {
+        self.try_send(key, data).unwrap()
     }
 
     /// Unsubscribes and removes the broadcast channel associated with the given key from the map.

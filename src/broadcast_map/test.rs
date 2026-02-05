@@ -26,7 +26,8 @@ pub async fn test_broadcast_map_unsubscribe() {
     let not_exist: Option<Broadcast<usize>> = broadcast_map.unsubscribe("nonexistent_key");
     assert!(not_exist.is_none());
     assert!(broadcast_map.subscribe("test_key").is_none());
-    let send_result: Result<Option<usize>, SendError<usize>> = broadcast_map.send("test_key", 30);
+    let send_result: Result<Option<usize>, SendError<usize>> =
+        broadcast_map.try_send("test_key", 30);
     assert!(send_result.unwrap().is_none());
     let result: Result<Result<usize, RecvError>, Elapsed> =
         timeout(Duration::from_millis(100), rec1.recv()).await;
@@ -57,4 +58,18 @@ pub async fn test_broadcast_map_unsubscribe_receiver_count() {
     let removed: Option<Broadcast<String>> = broadcast_map.unsubscribe("test_key");
     assert!(removed.is_some());
     assert_eq!(broadcast_map.receiver_count("test_key"), None);
+}
+
+#[tokio::test]
+pub async fn test_broadcast_map_send() {
+    let broadcast_map: BroadcastMap<usize> = BroadcastMap::new();
+    broadcast_map.insert("test_key", 10);
+    let mut rec1: BroadcastMapReceiver<usize> = broadcast_map.subscribe("test_key").unwrap();
+    let mut rec2: BroadcastMapReceiver<usize> = broadcast_map.subscribe("test_key").unwrap();
+    let count: Option<ReceiverCount> = broadcast_map.send("test_key", 42);
+    assert_eq!(count, Some(2));
+    assert_eq!(rec1.recv().await, Ok(42));
+    assert_eq!(rec2.recv().await, Ok(42));
+    let non_existent: Option<ReceiverCount> = broadcast_map.send("non_existent_key", 100);
+    assert_eq!(non_existent, None);
 }
