@@ -58,7 +58,7 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// - `Option<Broadcast<T>>` - Previous broadcast channel if replaced.
     #[inline(always)]
-    pub fn insert<K>(&self, key: K, capacity: Capacity) -> OptionBroadcast<T>
+    pub fn insert<K>(&self, key: K, capacity: Capacity) -> Option<Broadcast<T>>
     where
         K: AsRef<str>,
     {
@@ -76,13 +76,13 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// - `Option<ReceiverCount>` - Number of receivers if channel exists.
     #[inline(always)]
-    pub fn receiver_count<K>(&self, key: K) -> OptionReceiverCount
+    pub fn receiver_count<K>(&self, key: K) -> Option<ReceiverCount>
     where
         K: AsRef<str>,
     {
         self.get()
             .get(key.as_ref())
-            .map(|receiver| receiver.receiver_count())
+            .map(|receiver: Ref<'_, String, Broadcast<T>>| receiver.receiver_count())
     }
 
     /// Subscribes a new receiver to the broadcast channel associated with the given key.
@@ -95,13 +95,13 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// - `Option<BroadcastReceiver<T>>` - New receiver if channel exists.
     #[inline(always)]
-    pub fn subscribe<K>(&self, key: K) -> OptionBroadcastMapReceiver<T>
+    pub fn subscribe<K>(&self, key: K) -> Option<BroadcastMapReceiver<T>>
     where
         K: AsRef<str>,
     {
         self.get()
             .get(key.as_ref())
-            .map(|receiver| receiver.subscribe())
+            .map(|receiver: Ref<'_, String, Broadcast<T>>| receiver.subscribe())
     }
 
     /// Subscribes a new receiver to the broadcast channel associated with the given key.
@@ -141,10 +141,36 @@ impl<T: BroadcastMapTrait> BroadcastMap<T> {
     ///
     /// - `Result<Option<ReceiverCount>, SendError<T>>` - Send result with receiver count or error.
     #[inline(always)]
-    pub fn send<K: AsRef<str>>(&self, key: K, data: T) -> BroadcastMapSendResult<T> {
+    pub fn send<K: AsRef<str>>(
+        &self,
+        key: K,
+        data: T,
+    ) -> Result<Option<ReceiverCount>, SendError<T>> {
         match self.get().get(key.as_ref()) {
             Some(sender) => sender.send(data).map(Some),
             None => Ok(None),
         }
+    }
+
+    /// Unsubscribes and removes the broadcast channel associated with the given key from the map.
+    ///
+    /// This operation effectively cancels all subscriptions to the channel by removing it from the map.
+    /// Any existing receivers will no longer receive new messages, and the channel will be dropped.
+    ///
+    /// # Arguments
+    ///
+    /// - `AsRef<str>` - Key convertible to `str`.
+    ///
+    /// # Returns
+    ///
+    /// - `Option<Broadcast<T>>` - The removed broadcast channel if it existed, or `None` if no channel was associated with the key.
+    #[inline(always)]
+    pub fn unsubscribe<K>(&self, key: K) -> Option<Broadcast<T>>
+    where
+        K: AsRef<str>,
+    {
+        self.get()
+            .remove(key.as_ref())
+            .map(|(_, broadcast): (String, Broadcast<T>)| broadcast)
     }
 }
