@@ -38,7 +38,7 @@ pub async fn test_broadcast_map_unsubscribe() {
 pub async fn test_broadcast_map_unsubscribe_and_reinsert() {
     let broadcast_map: BroadcastMap<usize> = BroadcastMap::new();
     broadcast_map.insert("test_key", 10);
-    let _rec1: BroadcastMapReceiver<usize> = broadcast_map.subscribe("test_key").unwrap();
+    broadcast_map.subscribe("test_key").unwrap();
     let removed: Option<Broadcast<usize>> = broadcast_map.unsubscribe("test_key");
     assert!(removed.is_some());
     broadcast_map.insert("test_key", 10);
@@ -50,11 +50,11 @@ pub async fn test_broadcast_map_unsubscribe_and_reinsert() {
 #[tokio::test]
 pub async fn test_broadcast_map_unsubscribe_receiver_count() {
     let broadcast_map: BroadcastMap<String> = BroadcastMap::new();
-    broadcast_map.insert("channel", 10);
-    let _rec1: BroadcastMapReceiver<String> = broadcast_map.subscribe("channel").unwrap();
-    let _rec2: BroadcastMapReceiver<String> = broadcast_map.subscribe("channel").unwrap();
-    assert_eq!(broadcast_map.receiver_count("channel"), Some(2));
-    let removed: Option<Broadcast<String>> = broadcast_map.unsubscribe("channel");
+    broadcast_map.insert("test_key", 10);
+    let _rec1: BroadcastMapReceiver<String> = broadcast_map.subscribe("test_key").unwrap();
+    let _rec2: BroadcastMapReceiver<String> = broadcast_map.subscribe("test_key").unwrap();
+    assert_eq!(broadcast_map.receiver_count("test_key"), Some(2));
+    let removed: Option<Broadcast<String>> = broadcast_map.unsubscribe("test_key");
     assert!(removed.is_some());
-    assert_eq!(broadcast_map.receiver_count("channel"), None);
+    assert_eq!(broadcast_map.receiver_count("test_key"), None);
 }
