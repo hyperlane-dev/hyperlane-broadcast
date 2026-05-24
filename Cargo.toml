@@ -1,6 +1,6 @@
 [package]
 name = "hyperlane-broadcast"
-version = "2.0.3"
+version = "2.0.4"
 readme = "README.md"
 edition = "2024"
 authors = ["root@ltpp.vip"]
@@ -12,7 +12,7 @@ categories = ["network-programming", "web-programming"]
 exclude = ["target", "Cargo.lock", "sh", ".github"]
 
 [dependencies]
-dashmap = "6.1.0"
+dashmap = "6.2.1"
 twox-hash = "2.1.2"
 tokio = { version = "1.52.3", features = ["full"] }
 
