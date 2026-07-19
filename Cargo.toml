@@ -1,6 +1,6 @@
 [package]
 name = "hyperlane-broadcast"
-version = "2.0.8"
+version = "2.0.9"
 readme = "README.md"
 edition = "2024"
 authors = ["root@ltpp.vip"]
@@ -13,8 +13,8 @@ exclude = ["target", "Cargo.lock", "sh", ".github"]
 
 [dependencies]
 dashmap = "6.2.1"
-twox-hash = "2.1.2"
-tokio = { version = "1.52.3", features = ["full"] }
+twox-hash = "2.1.3"
+tokio = { version = "1.53.0", features = ["full"] }
 
 [profile.dev]
 incremental = false
