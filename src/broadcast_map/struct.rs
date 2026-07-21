@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Represents a concurrent, thread-safe map of broadcast channels, keyed by string.
 ///

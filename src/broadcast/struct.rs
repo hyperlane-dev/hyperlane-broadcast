@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Represents a broadcast mechanism for sending messages to multiple receivers.
 ///

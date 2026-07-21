@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Represents the number of active receivers subscribed to a broadcast channel.
 pub type ReceiverCount = usize;

@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Represents an error that occurs when attempting to send a message via a broadcast channel within a map.
 pub type BroadcastMapSendError<T> = SendError<T>;

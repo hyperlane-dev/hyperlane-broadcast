@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Implements the `BroadcastMapTrait` for any type that also implements `Clone` and `Debug`.
 /// This blanket implementation allows any clonable and debuggable type to be used as a value in the broadcast map system.
